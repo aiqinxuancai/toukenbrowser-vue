@@ -1,7 +1,7 @@
 <template>
   <div>
       <main>
-          <webview ref="foo" src="http://www.dmm.com/netgame/social/-/gadgets/=/app_id=825012/" id="webview" :preload="preload"></webview>
+          <webview ref="foo" src="http://www.dmm.com/netgame/social/-/gadgets/=/app_id=825012/" id="webview" :preload="preload" plugins></webview>
 
       </main>
   </div>
@@ -35,24 +35,15 @@ export default {
       console.log("new-window", e);
       const protocol = require("url").parse(e.url).protocol;
       if (protocol === "http:" || protocol === "https:") {
-        // shell.openExternal(e.url)
         window.open(e.url);
       }
     });
+
     webview.addEventListener("console-message", e => {
       console.log("console-message:", e.message);
     });
-    webview.addEventListener("did-frame-finish-load", e => {
-      console.log("did-frame-finish-load:", e);
-    });
-    webview.addEventListener("dom-ready", e => {
-      webview.insertCSS(`
-  body, p {
-    color: #ccc !important;
-    background-color: #333 !important;
-  }
-`);
-      console.log("dom-ready:", e);
+    webview.addEventListener("did-get-response-details", function(details) {
+      console.log(details);
     });
   }
 };
@@ -61,7 +52,7 @@ export default {
 <style scoped>
 webview {
   display: inline-flex;
-  width: 640px;
-  height: 480px;
+  width: 960px;
+  height: 580px;
 }
 </style>

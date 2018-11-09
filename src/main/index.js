@@ -12,7 +12,12 @@ if (process.env.NODE_ENV !== 'development') {
 app.commandLine.appendSwitch('proxy-server', 'http://127.0.0.1:1080');
 app.commandLine.appendSwitch('proxy-bypass-list', '<local>;')
 //app.commandLine.appendSwitch('proxy-pac-url', '*.dmm.com;')
+try {
+  const path = app.getPath('pepperFlashSystemPlugin')
+  app.commandLine.appendSwitch('ppapi-flash-path', path)
+} catch (e) {
 
+}
 
 let mainWindow
 const winURL = process.env.NODE_ENV === 'development'
@@ -41,7 +46,7 @@ function createWindow() {
   // console.log(socksUrl);
   // var mySocks = "http://127.0.0.1:1080";
   // mainWindow.webContents.session.setProxy({ proxyRules: mySocks }, function () {
-    
+
   // });
   mainWindow.loadURL(winURL)
 
