@@ -1,4 +1,4 @@
-console.log("GetGameFrtame Loaded");
+console.log("GetGameFrame Loaded");
 const { remote, webFrame } = require('electron')
 
 const alertCSS =
@@ -42,38 +42,10 @@ ul.area-menu{
 }
 `
 
-const disableTab = e => {
-  if (e.key === 'Tab') {
-    e.preventDefault()
-  }
-}
-
-function handleSpacingTop(show, count = 0) {
-  const status = show ? 'block' : 'none'
-  const action = show ? 'removeEventListener' : 'addEventListener'
-  if (document.querySelector('#spacing_top')) {
-    document.querySelector('#spacing_top').style.display = status
-  }
-  document[action]('keydown', disableTab)
-  if (count > 20 || !document.querySelector('#game_frame')) {
-    return
-  }
-  try {
-    const frameDocument = document.querySelector('#game_frame').contentDocument
-    frameDocument[action]('keydown', disableTab)
-    frameDocument.querySelector('#spacing_top').style.display = status
-    frameDocument.querySelector('#htmlWrap').contentDocument[action]('keydown', disableTab)
-  } catch (e) {
-    setTimeout(() => handleSpacingTop(show, count + 1), 1000)
-  }
-}
-
-
 window.align = function () {
   console.log("window.align");
   if (location.hostname === 'pc-play.games.dmm.com') {
     document.body.appendChild(alignCSS)
-    //handleSpacingTop(false)
     window.scrollTo(0, 0)
   } else if (location.pathname.includes('tohken')) {
     document.body.appendChild(alignCSS)
@@ -89,13 +61,10 @@ window.unalign = () => {
     if (document.querySelector('#spacing_top')) {
       document.querySelector('#spacing_top').style.display = 'block'
     }
-    //handleSpacingTop(true)
   }
 }
 
-// ref for item purchase css insertion
 const webContent = remote.getCurrentWebContents()
-
 const handleDocumentReady = () => {
   if (!document.body) {
     setTimeout(handleDocumentReady, 1000)
@@ -114,7 +83,6 @@ if (window.location.toString().includes('pc-play.games.dmm.com/play/tohken')) {
   const _documentWrite = document.write
   document.write = function () {
     if (document.readyState === 'interactive' || document.readyState === 'complete') {
-      console.warn(`Block document.write since document is at state "${document.readyState}". Blocked call:`, arguments)
     } else {
       _documentWrite.apply(this, arguments)
     }
