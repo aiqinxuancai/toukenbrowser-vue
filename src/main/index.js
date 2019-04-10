@@ -1,5 +1,5 @@
 import { app, BrowserWindow } from 'electron'
-
+const { session } = require('electron')
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
@@ -51,6 +51,8 @@ function createWindow() {
   mainWindow.loadURL(winURL)
 
   mainWindow.on('closed', () => {
+    console.log("onClose");
+    session.defaultSession.cookies.flushStore(() => { });
     mainWindow = null
   })
 }
